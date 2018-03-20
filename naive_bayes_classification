@@ -1,0 +1,36 @@
+# R
+#naive bayes classifier
+
+#installing the package and loading the library
+install.packages("e1071")
+library(e1071)
+
+?naiveBayes
+?Titanic
+head(Titanic)
+
+#load the titanic data set
+data(Titanic)
+
+#save this into a data-frame and view it
+titanic_df <- as.data.frame(Titanic)
+print(titanic_df)
+
+#this will repeat the enteries according to the frequency.
+#rep.int - replicates the values in x
+#seq_len - sequence length
+repeating_sequence = rep.int(seq_len(nrow(titanic_df)),titanic_df$Freq)
+
+#create a database from the newly created dataset
+titanic_dataset = titanic_df[repeating_sequence,]
+
+#drop the frequency from the table as we no longer need it
+titanic_dataset$Freq = NULL
+
+#now the data is ready for naive bayes classification
+naive_bayes_model = naiveBayes(Survived~., data= titanic_dataset)
+print(naive_bayes_model)
+
+#prediction on dataset
+nb_predictions = predict(naive_bayes_model,titanic_dataset)
+table(nb_predictions,titanic_dataset$Survived)
