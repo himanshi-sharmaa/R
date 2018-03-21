@@ -1,0 +1,56 @@
+# R
+#decision trees
+
+#installing the packages
+install.packages("MASS")
+install.packages("rpart")
+
+#loading the libraries
+library(MASS)
+library(rpart)
+
+head(birthwt)
+
+?birthwt
+
+#bwt - birth weight in grams
+hist(birthwt$bwt)
+
+#tabluar representation of infants with low weight
+table(birthwt$low)
+
+#0   1 
+#130  59  130 with wt heigher than 2.5kgs 
+#accuracy= 130 /(130+59)
+
+#building up of the model
+#convert the dataset into categorical form
+cols <- c('low','race','smoke','ht','ui')
+print(cols)
+birthwt[cols] <- lapply(birthwt[cols], as.factor)
+print(birthwt[cols])
+
+#birthwt[cols]<-as.factor(birthwt[cols])  nt working
+
+set.seed(1)
+#create a sample and test data
+#sample function will return a random permutation of a vector
+train <-sample(1:nrow(birthwt),0.75*nrow(birthwt))
+print(train)
+head(train)
+
+birthwtTree <- rpart(low ~ .-bwt , data=birthwt[train,], method='class' )
+
+plot(birthwtTree)
+text(birthwtTree, pretty = 0)
+
+summary(birthwtTree)
+
+#prediction
+birthwtPred <- predict(birthwtTree, birthwt[-train, ], type='class')
+table(birthwtPred, birthwt[-train,]$low)
+
+#birthwtPred  0  1
+#0 31 10
+#1  2  5
+#hence accuracy = (31+5)/(31+5+2+10)
