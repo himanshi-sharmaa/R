@@ -1,0 +1,29 @@
+#load the packages we will be using
+library(tidyverse)
+library(rpart)
+library(randomForest)
+
+#read the data and store data in DataFrame titled melbourne_data
+melbourne_data<-read_csv("../input/melb_data.csv")
+
+#to analyse the data get the summary of the data
+summary(melbourne_data)
+
+#create a prediction model 
+fit<-rpart(price~Rooms+Bathroom+Landsize+BuildingArea+YearBuilt+Lattitude+Longitude, data=melbourne_data)
+
+#plot the regression tree
+plot(fit,uniform=TRUE)
+
+#add text labels and make them 60% as big as they are by default
+text(fit, cex=.6)
+
+#we can now predict the price of the unknown 
+print("Making predictions for the given data")
+printf(head(melbourne_data))
+
+print("The predictions are:")
+print(predict(fir,head(melbourne_data))
+
+print("Actual price")
+print(head(melbourne_data$Price))
