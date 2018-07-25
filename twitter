@@ -1,0 +1,34 @@
+setwd("F:\\share\\RA15282-20180315T184602Z-001\\RA15282\\Rpackages-20180315T034639Z-001\\Rpackages")
+install.packages("twitteR")
+install.packages("RCurl")
+
+library(twitteR)
+library(RCurl)
+
+
+require(twitteR)
+require(RCurl)
+
+#twitter API authorization Process
+consumer_key<- '6EsPMafL3Q0wpnfCJEFhuhYoK'
+consumer_secret<-'mJF9YXmRZgZ9tzATqyTIrmiJYYvbh699dn6Ju3LkxoUkzFqWn1'
+access_token<-'974230724655108096-tJsHo6uQybHxpfL18fDEHG1mgrBlp66'
+access_secret<-'xEWQaUV2zXc5SzGxfCT3OZMkVWyasfRMrhltP90XKMxSM'
+
+setup_twitter_oauth(consumer_key, consumer_secret,access_token, access_secret)
+
+#search examples from function help file
+
+jallikattu <- searchTwitter('jallikattu',lang='en',n=50,resultType = 'recent')
+class(jallikattu)
+jallikattu
+
+#Convert list to vector
+
+Jtexts <- sapply(jallikattu, function(x) x$getText())
+str(Jtexts)
+
+
+#create corpus from vector of tweets
+library(corpus)
+library(tm)
