@@ -1,0 +1,81 @@
+install.packages("ggplot2")
+install.packages("tm")
+install.packages("wordcloud")
+install.packages("syuzhet")
+install.packages("SnowballC")
+
+setwd("F:\\share\\RA15282-20180315T184602Z-001\\RA15282\\Rpackages-20180315T034639Z-001\\Rpackages")
+
+getwd()
+library(ggplot2)
+library(tm)
+library(wordcloud)
+library(syuzhet)
+library(SnowballC)
+
+setwd("C:\\RA15282\\datasets")
+
+setwd("F:\\share\\RA15282-20180315T184602Z-001\\RA15282\\datasets")
+getwd()
+
+texts= readLines("Chat.txt")
+print(texts)
+
+#corpus: converts into documents
+#converts text into doc to perform preprocessing
+docs=Corpus(VectorSource(texts))
+print(docs)
+
+#to find patterns 
+trans=content_transformer(function(x,pattern) gsub(pattern,"",x))
+
+#removes unwanted data
+docs=tm_map(docs,content_transformer(tolower))
+
+docs=tm_map(docs,removeNumbers)
+docs=tm_map(docs,removeWords,stopwords("english"))
+docs=tm_map(docs,removePunctuation)
+docs=tm_map(docs,stripWhitespace)
+docs=tm_map(docs,stemDocument)
+docs
+
+#shows the report od documented data
+dtm=TermDocumentMatrix(docs)
+#to find frequencies matrix is created
+
+mat=as.matrix(dtm)
+mat
+
+#find the row sum value
+v=sort(rowSums(mat),decreasing = TRUE)
+print(v)
+#creates new data frame with words and frequency
+d=data.frame(word=names(v),freq=v)
+head(d)
+
+#rot.per=> rotation
+#  brewer.pal -> used for selecting colors
+wordcloud(words=d$word, freq=d$freq, min.freq=1, max.words=200,random.order=FALSE,rot.per=0.35,colors=brewer.pal(8,"Dark2"))
+
+
+
+##for sentimental analysis
+?get_nrc_sentiment
+
+sentiment=get_nrc_sentiment(texts)
+text=cbind(texts,sentiment)
+print(text)
+
+
+TotalSentiment=data.frame(colSums(text[,c(2:11)]))
+names(TotalSentiment)="count"
+
+
+TotalSentiment=cbind("sentiment"=rownames(TotalSentiment),TotalSentiment)
+print(TotalSentiment)
+
+rownames(TotalSentiment)=NULL
+
+ggplot(data=TotalSentiment, aes(x=sentiment, y=count))+geom_bar(aes(fill=sentiment),stat="identity")
+    +theme(legend.position="none")
+    +xlab("sentiment")+ylab("TotalCount")+ggtitle("Total Sentiment Score")
