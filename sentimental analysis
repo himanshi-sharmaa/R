@@ -5,7 +5,7 @@ install.packages("wordcloud")
 install.packages("syuzhet")
 install.packages("SnowballC")
 
-setwd("F:\\share\\RA15282-20180315T184602Z-001\\RA15282\\Rpackages-20180315T034639Z-001\\Rpackages")
+setwd("F:\\RA15282-20180315T184602Z-001\\RA15282\\Rpackages-20180315T034639Z-001\\Rpackages")
 
 getwd()
 library(ggplot2)
@@ -16,7 +16,7 @@ library(SnowballC)
 
 setwd("C:\\RA15282\\datasets")
 
-setwd("F:\\share\\RA15282-20180315T184602Z-001\\RA15282\\datasets")
+setwd("F:\\RA15282-20180315T184602Z-001\\RA15282\\datasets")
 getwd()
 
 texts= readLines("Chat.txt")
